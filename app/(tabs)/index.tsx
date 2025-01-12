@@ -10,16 +10,15 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Link href="/about" style={styles.button}>
-        Go to about screen! Please.
-      </Link>
+      <Text style={styles.text}>
+        Welcome to the Techsavvy app!
+      </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  text: {
     fontSize: 20,
-    textDecorationLine: 'underline',
   }
 })
