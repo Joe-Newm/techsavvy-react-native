@@ -1,8 +1,10 @@
 import { Text, View, StyleSheet, Pressable } from "react-native";
 import { Link } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
+import { useRouter } from "expo-router";
 
 export default function Index() {
+  const router = useRouter();
   return (
     <View
       style={{
@@ -14,10 +16,16 @@ export default function Index() {
       <Text style={styles.text}>
         Welcome to the Techsavvy app!
       </Text>
-      <Pressable style={styles.button} onPress={() => alert('You pressed a button.')}>
+      <Pressable
+        style={styles.button}
+        onPress={() => router.push('/submit-ticket')} // Navigate on press
+      >
+        <Text style={styles.buttonLabel}> Submit a Ticket </Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => alert("I haven't set up call functionality yet :(")}>
         <Text style={styles.buttonLabel}> Call </Text>
       </Pressable>
-    </View>
+    </View >
   );
 }
 
@@ -28,16 +36,20 @@ const styles = StyleSheet.create({
     fontWeight: 700,
   },
   button: {
+    display: 'flex',
     borderRadius: 10,
     width: '90%',
     height: 60,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row',
-    backgroundColor: 'black',
+    flexDirection: 'column',
+    backgroundColor: '#ffa904',
+    marginBottom: 20,
+    textAlign: 'center',
   },
   buttonLabel: {
-    color: 'white',
+    color: 'black',
     fontSize: 20,
+    fontWeight: 600,
   },
 })
