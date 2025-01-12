@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable } from "react-native";
+import { Text, View, StyleSheet, Pressable, Linking } from "react-native";
 import { Link } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { useRouter } from "expo-router";
@@ -22,7 +22,7 @@ export default function Index() {
       >
         <Text style={styles.buttonLabel}> Submit a Ticket </Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => alert("I haven't set up call functionality yet :(")}>
+      <Pressable style={styles.button} onPress={() => Linking.openURL('tel:3188840844').catch((err) => console.error('Failed to open phone dialer', err))}>
         <Text style={styles.buttonLabel}> Call </Text>
       </Pressable>
     </View >
