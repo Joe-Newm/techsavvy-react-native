@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     fontWeight: 600,
   },
   image: {
-    height: 300,
-    width: 300,
+    height: 200,
+    width: 200,
+    marginBottom: 20,
   }
 })
