@@ -1,7 +1,8 @@
-import { Text, View, StyleSheet, Pressable, Linking } from "react-native";
+import { Text, View, StyleSheet, Pressable, Linking, Image } from "react-native";
 import { Link } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { useRouter } from "expo-router";
+import SvgUri from 'react-native-svg';
 
 export default function Index() {
   const router = useRouter();
@@ -13,9 +14,19 @@ export default function Index() {
         alignItems: "center",
       }}
     >
+      {/*
       <Text style={styles.text}>
         Welcome to the Techsavvy app!
       </Text>
+      */}
+
+      {/*<SvgUri uri={require('../../assets/images/full-logo.svg')} width="200" height="200" /> */}
+
+      <Image
+        source={require('../../assets/images/full-logo.png')} // Adjust the path accordingly
+        style={styles.image}
+        resizeMode="contain" // This keeps the aspect ratio
+      />
       <Pressable
         style={styles.button}
         onPress={() => router.push('/submit-ticket')} // Navigate on press
@@ -52,4 +63,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 600,
   },
+  image: {
+    height: 300,
+    width: 300,
+  }
 })
