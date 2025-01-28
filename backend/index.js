@@ -8,8 +8,6 @@ app.use(express.json());
 
 // Environment variables for sensitive data
 const CONNECTWISE_DOMAIN = 'https://na.connectwisedev.com';
-const API_CREDENTIALS = 'your_api_credentials'; // Base64 encoded "username:companyid:password"
-const CLIENT_ID = 'your_client_id';
 
 // generate auth header
 function getAuthHeader() {
@@ -42,8 +40,7 @@ app.post('/create-ticket', async (req, res) => {
         },
         company: {
           id: 1,
-          identifier: 'COMP001',
-          name: 'Example Company',
+          name: 'TechSavvy LLC',
         },
         contact: {
           id: 1,
@@ -55,23 +52,9 @@ app.post('/create-ticket', async (req, res) => {
           sort: 1,
           level: 'High',
         },
-        initialDescription: 'This is the initial description of the ticket.',
+        initialDescription: 'This is an example ticket. Testing the api.',
         severity: 'Low',
         impact: 'Low',
-        requiredDate: '2025-01-21T20:55:19.017Z',
-        processNotifications: true,
-        skipCallback: false,
-        customFields: [
-          {
-            id: 1,
-            caption: 'Custom Field 1',
-            type: 'TextArea',
-            entryMethod: 'Date',
-            numberOfDecimals: 0,
-            value: 'Custom Value',
-            connectWiseId: 'CW001',
-          },
-        ],
       };
   
       // Send the POST request to ConnectWise
@@ -81,8 +64,8 @@ app.post('/create-ticket', async (req, res) => {
         {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Basic ${API_CREDENTIALS}`,
-            ClientId: CLIENT_ID,
+            Authorization: getAuthHeader(),
+            ClientId: process.env.CLIENT_ID,
           },
         }
       );
