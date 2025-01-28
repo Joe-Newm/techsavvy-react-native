@@ -2,6 +2,8 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = 3000;
+require('dotenv').config();
+
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -13,7 +15,7 @@ const CONNECTWISE_DOMAIN = 'https://api-na.myconnectwise.net/v4_6_release/apis/3
 function getAuthHeader() {
     const publicKey = process.env.PUBLIC_KEY;
     const privateKey = process.env.PRIVATE_KEY;
-    const credentials = `${publicKey}:${privateKey}`;
+    const credentials = `techsavvy+${publicKey}:${privateKey}`;
     const encodedCredentials = Buffer.from(credentials).toString("base64");
     return `Basic ${encodedCredentials}`;
 }
@@ -40,19 +42,14 @@ app.post('/create-ticket', async (req, res) => {
         },
         company: {
           id: 250,
+          identifier: 'TechSavvy LLC',
           name: 'TechSavvy LLC',
         },
         contact: {
           id: 1,
-          firstName: 'Jorge',
-          lastName: 'Smith',
+          
         },
-        priority: {
-          id: 1,
-          name: 'High',
-          sort: 1,
-          level: 'High',
-        },
+       
         initialDescription: 'This is an example ticket. Testing the api.',
         severity: 'Low',
         impact: 'Low',
@@ -60,13 +57,13 @@ app.post('/create-ticket', async (req, res) => {
   
       // Send the POST request to ConnectWise
       const response = await axios.post(
-        `${CONNECTWISE_DOMAIN}/v4_6_release/apis/3.0/service/tickets`,
+        `${CONNECTWISE_DOMAIN}/service/tickets`,
         ticketData,
         {
           headers: {
             'Content-Type': 'application/json',
             Authorization: getAuthHeader(),
-            ClientId: process.env.CLIENT_ID,
+            clientId: process.env.CLIENT_ID,
           },
         }
       );
@@ -88,3 +85,6 @@ app.post('/create-ticket', async (req, res) => {
 app.listen(port, () => {
     console.log(`Your server is listening on port ${port}`);
 });
+
+console.log(process.env.PUBLIC_KEY)
+console.log(process.env.PRIVATE_KEY)
