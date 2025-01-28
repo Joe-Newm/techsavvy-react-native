@@ -7,7 +7,7 @@ const port = 3000;
 app.use(express.json());
 
 // Environment variables for sensitive data
-const CONNECTWISE_DOMAIN = 'https://na.connectwisedev.com';
+const CONNECTWISE_DOMAIN = 'https://api-na.myconnectwise.net/v4_6_release/apis/3.0';
 
 // generate auth header
 function getAuthHeader() {
@@ -32,19 +32,20 @@ app.post('/create-ticket', async (req, res) => {
         recordType: 'ProjectIssue',
         board: {
           id: 1,
-          name: 'Service Board',
+          name: 'Help Desk',
         },
         status: {
           id: 1,
           name: 'New',
         },
         company: {
-          id: 1,
+          id: 250,
           name: 'TechSavvy LLC',
         },
         contact: {
           id: 1,
-          name: 'John Doe',
+          firstName: 'Jorge',
+          lastName: 'Smith',
         },
         priority: {
           id: 1,
