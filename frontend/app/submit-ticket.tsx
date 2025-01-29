@@ -7,6 +7,7 @@ export default function SubmitScreen() {
     defaultValues: {
       subject: '',  // Ensure empty string instead of undefined
       message: '',
+      email: '',
     }
   });
 
@@ -16,6 +17,7 @@ export default function SubmitScreen() {
     const body = JSON.stringify({
       summary: data.subject,
       initialDescription: data.message,
+      contactemailaddress: data.email,
     });
 
     try {
@@ -36,6 +38,7 @@ export default function SubmitScreen() {
       }
     } catch (error) {
       console.log("error sending ticket to backend", error);
+      alert("Ticket failed to send. Please call us.")
     }
 
   };
@@ -44,6 +47,20 @@ export default function SubmitScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Submit a ticket</Text>
+      <Controller
+        control={control}
+        render={({ field: { onChange, onBlur, value } }) => (
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="#888"
+            onBlur={onBlur}
+            onChangeText={onChange}
+            value={value}
+            style={styles.form}
+          />
+        )}
+        name="email"
+      />
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
