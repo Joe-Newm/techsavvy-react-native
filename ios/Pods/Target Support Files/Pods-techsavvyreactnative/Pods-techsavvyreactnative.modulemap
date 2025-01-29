@@ -1,6 +1,0 @@
-module Pods_techsavvyreactnative {
-  umbrella header "Pods-techsavvyreactnative-umbrella.h"
-
-  export *
-  module * { export * }
-}
