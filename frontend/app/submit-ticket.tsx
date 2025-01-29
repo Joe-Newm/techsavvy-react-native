@@ -3,50 +3,40 @@ import { useForm, Controller } from 'react-hook-form';
 
 
 export default function SubmitScreen() {
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit } = useForm({
+    defaultValues: {
+      subject: '',  // Ensure empty string instead of undefined
+      message: '',
+    }
+  });
 
   const onSubmit = async (data: any) => {
-    const sendgridApiKey = process.env.EXPO_PUBLIC_SENDGRID_API_KEY;
-    const url = 'https://api.sendgrid.com/v3/mail/send';
-    console.log(sendgridApiKey)
-
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sendgridApiKey}`,
-    };
+    const url = 'http://localhost:3000/create-ticket';
 
     const body = JSON.stringify({
-      personalizations: [
-        {
-          to: [{ email: 'broseph500@gmail.com' }],
-          subject: data.subject,
-        },
-      ],
-      from: { email: 'j.newm500@gmail.com' },
-      content: [
-        {
-          type: 'text/plain',
-          value: data.message,
-        },
-      ],
+      summary: data.subject,
+      initialDescription: data.message,
+
     });
 
     try {
       const response = await fetch(url, {
         method: 'POST',
-        headers,
+        headers: {
+          "Content-Type": "application/json"
+        },
         body,
       })
       if (response.ok) {
-        console.log("email sent!")
+        console.log("submited!")
         alert("Your ticket has been submitted successfully. Please give us some time to work on your issue.")
 
       } else {
-        console.log("email failed to send.", await response.text());
-        alert("Error. Email failed to send.")
+        console.log("frontend failed to send.", await response.text());
+        alert("Error. message failed to send.")
       }
     } catch (error) {
-      console.log("error sending email", error);
+      console.log("error sending ticket to backend", error);
     }
 
   };
