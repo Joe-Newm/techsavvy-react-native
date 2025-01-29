@@ -16,7 +16,6 @@ export default function SubmitScreen() {
     const body = JSON.stringify({
       summary: data.subject,
       initialDescription: data.message,
-
     });
 
     try {
@@ -33,7 +32,7 @@ export default function SubmitScreen() {
 
       } else {
         console.log("frontend failed to send.", await response.text());
-        alert("Error. message failed to send.")
+        alert("Error. message failed to send. Make sure you filled out every form field.")
       }
     } catch (error) {
       console.log("error sending ticket to backend", error);

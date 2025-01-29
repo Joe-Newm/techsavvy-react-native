@@ -51,13 +51,9 @@ app.post('/create-ticket', async (req, res) => {
         name: 'New',
       },
       company: {
-        id: 250,
-        identifier: 'TechSavvy LLC',
-        name: 'TechSavvy LLC',
-      },
-      contact: {
-        id: 1,
-
+        id: 19297,
+        identifier: 'XYZTestCompany',
+        name: 'XYZTestCompany',
       },
 
       initialDescription,
@@ -96,5 +92,3 @@ app.listen(port, () => {
   console.log(`Your server is listening on port ${port}`);
 });
 
-console.log(process.env.PUBLIC_KEY)
-console.log(process.env.PRIVATE_KEY)
