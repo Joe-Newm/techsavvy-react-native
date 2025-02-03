@@ -120,7 +120,7 @@ const getContactByEmail = async (email) => {
 
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
-  const { summary, initialDescription, contactemailaddress } = req.body;
+  const { summary, initialDescription, contactemailaddress, image } = req.body;
 
   // Step 1: Fetch all contacts
   let contacts = [];
@@ -151,6 +151,12 @@ app.post('/create-ticket', async (req, res) => {
     companyName = matchedContact.company?.name || companyName;
   }
 
+  let updatedDescription = initialDescription;
+  if (image) {
+    updatedDescription += `\n\nImage: [View Image](${image})`;
+
+  }
+
   try {
     // Define the ticket data
     const ticketData = {
@@ -174,7 +180,7 @@ app.post('/create-ticket', async (req, res) => {
         name: companyName,
       },
 
-      initialDescription,
+      initialDescription: updatedDescription,
       severity: 'Low',
       impact: 'Low',
     };
