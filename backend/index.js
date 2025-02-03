@@ -30,75 +30,112 @@ app.get('/', (req, res) => {
 
 // Function to get all contacts with pagination
 const getAllContacts = async () => {
-    let allContacts = [];
-    let page = 1;
-    let pageSize = 100;  // Set to 1000 if API allows, but this ensures proper pagination.
-    let totalPages = 1;  
+  let allContacts = [];
+  let page = 1;
+  let pageSize = 100;  // Set to 1000 if API allows, but this ensures proper pagination.
+  let totalPages = 1;
 
-    while (page <= totalPages) {
-        try {
-            const response = await axios.get(
-                `${CONNECTWISE_DOMAIN}/company/contacts`,
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: getAuthHeader(),
-                        clientId: process.env.CLIENT_ID,
-                    },
-                    params: {
-                        page,     // Request the current page
-                        pageSize, // Number of contacts per page
-                    },
-                }
-            );
-
-            if (!response.data || response.data.length === 0) break;  // Stop if no data is returned
-
-            allContacts = [...allContacts, ...response.data];
-
-            // Update totalPages if available
-            if (response.headers['x-total-pages']) {
-                totalPages = parseInt(response.headers['x-total-pages'], 10);
-            } else {
-                totalPages++; // Increment manually if header isn't provided
-            }
-
-            page++;  // Move to next page
-        } catch (error) {
-            console.error("Error fetching contacts:", error.message);
-            break;
+  while (page <= totalPages) {
+    try {
+      const response = await axios.get(
+        `${CONNECTWISE_DOMAIN}/company/contacts`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: getAuthHeader(),
+            clientId: process.env.CLIENT_ID,
+          },
+          params: {
+            page,     // Request the current page
+            pageSize, // Number of contacts per page
+          },
         }
-    }
+      );
 
-    return allContacts;
+      if (!response.data || response.data.length === 0) break;  // Stop if no data is returned
+
+      allContacts = [...allContacts, ...response.data];
+
+      // Update totalPages if available
+      if (response.headers['x-total-pages']) {
+        totalPages = parseInt(response.headers['x-total-pages'], 10);
+      } else {
+        totalPages++; // Increment manually if header isn't provided
+      }
+
+      page++;  // Move to next page
+    } catch (error) {
+      console.error("Error fetching contacts:", error.message);
+      break;
+    }
+  }
+
+  return allContacts;
 };
-  
-  // Call the function and log all contacts
-  getAllContacts().then((contacts) => {
-    console.log(`Retrieved ${contacts.length} contacts.`);
-  }).catch((error) => {
-    console.error("Error:", error);
-  });
+
+
+
+
+
+
+
+
+// get contacts
+
+const getContactByEmail = async (email) => {
+  try {
+    const response = await axios.get(
+      `${CONNECTWISE_DOMAIN}/company/contacts`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: getAuthHeader(),
+          clientId: process.env.CLIENT_ID,
+        },
+        params: {
+          conditions: `communicationItems/value like "${email}" AND communicationItems/communicationType="Email"` // API filter condition
+        },
+      }
+    );
+
+    return response.data.length > 0 ? response.data[0] : null; // Return first match
+  } catch (error) {
+    console.error("Error fetching contact:", error.response ? JSON.stringify(error.response.data, null, 2) : error.message);
+    return null;
+  }
+};
+
+
+
+
+
+
+
+// Call the function and log all contacts
+//getAllContacts().then((contacts) => {
+//  console.log(`Retrieved ${contacts.length} contacts.`);
+//}).catch((error) => {
+//  console.error("Error:", error);
+//});
 
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
   const { summary, initialDescription, contactemailaddress } = req.body;
 
-// Step 1: Fetch all contacts
-let contacts = [];
-try {
-  contacts = await getAllContacts(); // Wait for the contacts to be fetched
-} catch (error) {
-  return res.status(500).json({ error: "Failed to fetch contacts." });
-}
+  // Step 1: Fetch all contacts
+  let contacts = [];
+  try {
+    contacts = await getAllContacts(); // Wait for the contacts to be fetched
+  } catch (error) {
+    return res.status(500).json({ error: "Failed to fetch contacts." });
+  }
 
   // Step 2: Filter manually in JavaScript
-  const matchedContact = contacts.find(contact => 
-    contact.communicationItems?.some(item => 
+  const matchedContact = contacts.find(contact =>
+    contact.communicationItems?.some(item =>
       item.communicationType === "Email" && item.value === contactemailaddress
     )
   );
-
 
   if (!summary || !initialDescription) {
     return res.status(400).json({ error: "Summary and Initial Description are required." });
@@ -111,8 +148,8 @@ try {
   if (matchedContact) {
     contactId = matchedContact.id;
     companyId = matchedContact.company?.id || companyId;
-    companyName = matchedContact.company?.name || companyName; 
-}
+    companyName = matchedContact.company?.name || companyName;
+  }
 
   try {
     // Define the ticket data
@@ -124,8 +161,8 @@ try {
         name: 'Help Desk',
       },
       status: {
-        id: 1,
-        name: '1. New',
+        id: 16,
+        name: 'New',
       },
       contactemailaddress,
       contact: {

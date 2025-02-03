@@ -1,8 +1,10 @@
-import { View, Text, TextInput, Button, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
+import React, { useState } from "react";
 
 
 export default function SubmitScreen() {
+  const [loading, setloading] = useState(false);
   const { control, handleSubmit } = useForm({
     defaultValues: {
       subject: '',  // Ensure empty string instead of undefined
@@ -12,6 +14,7 @@ export default function SubmitScreen() {
   });
 
   const onSubmit = async (data: any) => {
+    setloading(true);
     const url = 'http://localhost:3000/create-ticket';
 
     const body = JSON.stringify({
@@ -39,6 +42,8 @@ export default function SubmitScreen() {
     } catch (error) {
       console.log("error sending ticket to backend", error);
       alert("Ticket failed to send. Please call us.")
+    } finally {
+      setloading(false);
     }
 
   };
@@ -89,9 +94,15 @@ export default function SubmitScreen() {
         )}
         name="message"
       />
-      <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
-        <Text style={styles.buttonLabel}>Submit</Text>
-      </Pressable>
+
+      {loading ? (
+        <ActivityIndicator size="large" color="#ffa904" />
+      ) : (
+        <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
+          <Text style={styles.buttonLabel}>Submit</Text>
+        </Pressable>
+
+      )}
     </View>
   )
 }
