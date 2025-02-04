@@ -1,6 +1,6 @@
 import {
   View, Text, TextInput, Button, Pressable,
-  StyleSheet, ActivityIndicator, TouchableOpacity, Image
+  StyleSheet, ActivityIndicator, TouchableOpacity, Image, ScrollView
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
@@ -11,13 +11,30 @@ export default function CategoryScreen() {
   const router = useRouter();
 
   return (
+    <ScrollView>
     <View style={styles.container}>
-      <Text style={styles.text}>What Type of Ticket do You Want To Submit?</Text>
+      <Text style={styles.text}>What Type of Ticket are You Submitting?</Text>
+      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
+        <Text style={styles.buttonLabel}>hi</Text>
+      </Pressable>
+
+      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
+        <Text style={styles.buttonLabel}>hi</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
+        <Text style={styles.buttonLabel}>hi</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
+        <Text style={styles.buttonLabel}>hi</Text>
+      </Pressable>
+      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
+        <Text style={styles.buttonLabel}>hi</Text>
+      </Pressable>
       <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
         <Text style={styles.buttonLabel}>hi</Text>
       </Pressable>
     </View>
-
+</ScrollView>
   )
 }
 
@@ -27,6 +44,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     fontWeight: "700",
     marginBottom: 20,
+    textAlign: 'center',
   },
   container: {
     flex: 1,
@@ -48,5 +66,6 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: 20,
   }
 })
