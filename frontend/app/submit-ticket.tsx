@@ -1,6 +1,6 @@
-import { 
-  View, Text, TextInput, Button, Pressable, 
-  StyleSheet, ActivityIndicator, TouchableOpacity, Image 
+import {
+  View, Text, TextInput, Button, Pressable,
+  StyleSheet, ActivityIndicator, TouchableOpacity, Image
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
@@ -127,7 +127,7 @@ export default function SubmitScreen() {
 
       {/* Image Upload (Optional) */}
       <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
-        <Text style={{ color: "black",fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
+        <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
       </TouchableOpacity>
 
       {image && (
@@ -138,7 +138,7 @@ export default function SubmitScreen() {
       )}
 
       {loading ? (
-        <ActivityIndicator size="large" color="#ffa904" />
+        <ActivityIndicator size="large" color="#ffa904" style={{ marginTop: 20 }} />
       ) : (
         <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
           <Text style={styles.buttonLabel}>Submit</Text>
@@ -172,6 +172,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffa904',
     marginBottom: 20,
+    marginTop: 20,
   },
   form: {
     backgroundColor: '#E0E0E0',

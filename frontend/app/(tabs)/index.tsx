@@ -29,7 +29,7 @@ export default function Index() {
       />
       <Pressable
         style={styles.button}
-        onPress={() => router.push('/submit-ticket')} // Navigate on press
+        onPress={() => router.push('/category')} // Navigate on press
       >
         <Text style={styles.buttonLabel}> Submit a Ticket </Text>
       </Pressable>

@@ -5,5 +5,6 @@ export default function RootLayout() {
     <Stack.Screen name="(tabs)" options={{ title: 'Home', headerShown: false }} />
     <Stack.Screen name="+not-found" />
     <Stack.Screen name="submit-ticket" />
+    <Stack.Screen name="category" />
   </Stack>
 }

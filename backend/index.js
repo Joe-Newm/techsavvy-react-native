@@ -77,47 +77,6 @@ const getAllContacts = async () => {
 
 
 
-
-
-
-// get contacts
-
-const getContactByEmail = async (email) => {
-  try {
-    const response = await axios.get(
-      `${CONNECTWISE_DOMAIN}/company/contacts`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: getAuthHeader(),
-          clientId: process.env.CLIENT_ID,
-        },
-        params: {
-          conditions: `communicationItems/value like "${email}" AND communicationItems/communicationType="Email"` // API filter condition
-        },
-      }
-    );
-
-    return response.data.length > 0 ? response.data[0] : null; // Return first match
-  } catch (error) {
-    console.error("Error fetching contact:", error.response ? JSON.stringify(error.response.data, null, 2) : error.message);
-    return null;
-  }
-};
-
-
-
-
-
-
-
-// Call the function and log all contacts
-//getAllContacts().then((contacts) => {
-//  console.log(`Retrieved ${contacts.length} contacts.`);
-//}).catch((error) => {
-//  console.error("Error:", error);
-//});
-
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
   const { summary, initialDescription, contactemailaddress, image } = req.body;
@@ -154,7 +113,6 @@ app.post('/create-ticket', async (req, res) => {
   let updatedDescription = initialDescription;
   if (image) {
     updatedDescription += `\n\nImage: [View Image](${image})`;
-
   }
 
   try {
