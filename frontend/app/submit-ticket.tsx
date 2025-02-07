@@ -6,6 +6,7 @@ import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
+import SelectDropdown from 'react-native-select-dropdown'
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
@@ -52,8 +53,13 @@ export default function SubmitScreen() {
         name: "Chromebook Repair"
       }
     }
-
   }
+
+  const options = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+  ];
 
   console.log(type);
   const onSubmit = async (data: any) => {
@@ -146,6 +152,23 @@ export default function SubmitScreen() {
         )}
       />
 
+      <Controller
+        control={control}
+        rules={{ required: 'This field is required' }}
+        render={({ field: { onChange, value } }) => (
+          <SelectDropdown
+            data={options}
+            onSelect={onChange}
+            buttonTextAfterSelection={(selectedItem) => selectedItem}
+            buttonStyle={{ backgroundColor: "red", width: "90%", borderRadius: 10 }}
+            buttonTextStyle={{ color: "white", fontSize: 16 }}
+            rowTextForSelection={(item) => item}
+            defaultButtonText="Select an option"
+            selectedRow={value}
+          />
+        )}
+        name="dropdown"
+      />
       {/* Image Upload (Optional) */}
       <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
         <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>

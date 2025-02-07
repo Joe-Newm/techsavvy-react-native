@@ -22,7 +22,7 @@ export default function CategoryScreen() {
           <Text style={styles.buttonLabel}>Chromebook Repair Ticket</Text>
         </Pressable>
       </View>
-    </ScrollView>
+    </ScrollView >
   )
 }
 
