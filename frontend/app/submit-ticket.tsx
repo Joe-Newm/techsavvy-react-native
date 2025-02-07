@@ -1,6 +1,6 @@
 import {
   View, Text, TextInput, Button, Pressable,
-  StyleSheet, ActivityIndicator, TouchableOpacity, Image
+  StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
@@ -67,9 +67,9 @@ export default function SubmitScreen() {
   }
 
   const options = [
-    { value: 'option1', label: 'Option 1' },
-    { value: 'option2', label: 'Option 2' },
-    { value: 'option3', label: 'Option 3' },
+    { value: 'option1', label: 'Low' },
+    { value: 'option2', label: 'Medium' },
+    { value: 'option3', label: 'High' },
   ];
 
   console.log(type);
@@ -112,117 +112,132 @@ export default function SubmitScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Submit a Ticket</Text>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
 
-      <Controller
-        control={control}
-        name="email"
-        rules={{ required: "Email is required" }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#888"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.form}
-          />
-        )}
-      />
+      <View style={styles.container}>
+        <Text style={styles.text}>Submit a Ticket</Text>
 
-      <Controller
-        control={control}
-        name="subject"
-        rules={{ required: "Subject is required" }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Subject"
-            placeholderTextColor="#888"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.form}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="message"
-        rules={{ required: "Message is required" }}
-        render={({ field: { onChange, onBlur, value } }) => (
-          <TextInput
-            placeholder="Message"
-            placeholderTextColor="#888"
-            onBlur={onBlur}
-            onChangeText={onChange}
-            value={value}
-            style={styles.form}
-          />
-        )}
-      />
-      <Text style={styles.label}>Priority</Text>
-
-      <Controller
-        control={control}
-        rules={{ required: 'This field is required' }}
-        render={({ field: { onChange, value } }) => (
-          <Dropdown
-            style={styles.dropdown}
-            placeholderStyle={styles.placeholderStyle}
-            selectedTextStyle={styles.selectedTextStyle}
-            inputSearchStyle={styles.inputSearchStyle}
-            data={options}
-            maxHeight={300}
-            labelField="label"
-            valueField="value"
-            placeholder="Select item"
-            searchPlaceholder="Search..."
-            value={value}
-            onChange={item => {
-              setdropdownValue(item.value);
-            }}
-            renderItem={renderItem}
-          />
-        )}
-        name="dropdown"
-      />
-      {/* Image Upload (Optional) */}
-      <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
-        <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
-      </TouchableOpacity>
-
-      {image && (
-        <Image
-          source={{ uri: image }}
-          style={{ width: 100, height: 100, marginTop: 10 }}
+        <Controller
+          control={control}
+          name="email"
+          rules={{ required: "Email is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor="#888"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              style={styles.form}
+            />
+          )}
         />
-      )}
 
-      {loading ? (
-        <ActivityIndicator size="large" color="#ffa904" style={{ marginTop: 20 }} />
-      ) : (
-        <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
-          <Text style={styles.buttonLabel}>Submit</Text>
-        </Pressable>
-      )}
-    </View>
+        <Controller
+          control={control}
+          name="subject"
+          rules={{ required: "Subject is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              placeholder="Subject"
+              placeholderTextColor="#888"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              style={styles.form}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="message"
+          rules={{ required: "Message is required" }}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <TextInput
+              placeholder="Message"
+              placeholderTextColor="#888"
+              onBlur={onBlur}
+              onChangeText={onChange}
+              value={value}
+              style={styles.form}
+            />
+          )}
+        />
+
+        <View style={{ alignItems: "flex-start", width: "90%" }}>
+          <Text style={[styles.label, { textAlign: 'left' }]}>Priority</Text>
+        </View>
+
+        <Controller
+          control={control}
+          name="priority"
+          defaultValue={options[0]} // Ensure there's a default value
+          render={({ field: { onChange, value } }) => (
+            <Dropdown
+              style={styles.dropdown}
+              data={options}
+              labelField="label"
+              valueField="value"
+              placeholder="Select an option"
+              value={value} // Controlled value
+              renderItem={renderItem}
+              renderRightIcon={null}
+              renderTouchableComponent={TouchableOpacity}
+              onChange={(item) => {
+                setdropdownValue(item.value); // Update local state
+                onChange(item.value); // Update react-hook-form
+              }}
+            />
+          )}
+        />
+        {/* Image Upload (Optional) */}
+        <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
+          <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
+        </TouchableOpacity>
+
+        {
+          image && (
+            <Image
+              source={{ uri: image }}
+              style={{ width: 100, height: 100, marginTop: 10 }}
+            />
+          )
+        }
+
+        {
+          loading ? (
+            <ActivityIndicator size="large" color="#ffa904" style={{ marginTop: 20 }} />
+          ) : (
+            <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
+              <Text style={styles.buttonLabel}>Submit</Text>
+            </Pressable>
+          )
+        }
+      </View >
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
   textItem: {
-    height: 60,
+    height: 40,
+    fontSize: 20,
+    justifyContent: 'center',
+    marginTop: 20,
   },
   label: {
-    textAlign: 'left',
+    fontSize: 16,
+    marginBottom: 5,
   },
   dropdown: {
     width: "90%",
     height: 60,
     borderWidth: 2,
     borderRadius: 10,
+    justifyContent: "center",
+    paddingHorizontal: 10,
+    fontSize: 20,
   },
   container: {
     flex: 1,
@@ -271,5 +286,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 10,
     borderRadius: 10,
+    marginTop: 40,
   },
 });
