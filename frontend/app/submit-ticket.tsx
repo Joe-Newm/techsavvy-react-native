@@ -5,8 +5,10 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
+import { useLocalSearchParams } from "expo-router";
 
 export default function SubmitScreen() {
+  const { type } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null); // Move image state here
   const { control, handleSubmit, setValue } = useForm({
@@ -25,7 +27,7 @@ export default function SubmitScreen() {
       includeBase64: false,
     };
 
-    launchImageLibrary(options, (response) => {
+    launchImageLibrary(options, (response: any) => {
       if (response.didCancel) {
         console.log("User cancelled image picker");
       } else if (response.errorMessage) {
@@ -38,15 +40,34 @@ export default function SubmitScreen() {
     });
   };
 
-  const onSubmit = async (data) => {
+  const checkCategory = (ticketType: any) => {
+    if (ticketType == "support") {
+      return {
+        id: 1,
+        name: "Help Desk"
+      }
+    } else {
+      return {
+        id: 25,
+        name: "Chromebook Repair"
+      }
+    }
+
+  }
+
+  console.log(type);
+  const onSubmit = async (data: any) => {
     setLoading(true);
     const url = 'http://localhost:3000/create-ticket';
+
+    const boardCheck = checkCategory(type);
 
     const body = JSON.stringify({
       summary: data.subject,
       initialDescription: data.message,
       contactemailaddress: data.email,
       image: data.image,  // Include optional image
+      boardType: boardCheck,
     });
 
     try {
@@ -155,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   text: {
-    fontSize: 40,
+    fontSize: 24,
     fontWeight: "700",
     marginBottom: 20,
   },

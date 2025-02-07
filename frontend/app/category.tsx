@@ -12,36 +12,24 @@ export default function CategoryScreen() {
 
   return (
     <ScrollView>
-    <View style={styles.container}>
-      <Text style={styles.text}>What Type of Ticket are You Submitting?</Text>
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
+      <View style={styles.container}>
+        <Text style={styles.text}>What Type of Ticket are You Submitting?</Text>
+        <Pressable style={styles.button} onPress={() => router.push('/submit-ticket?type=support')}>
+          <Text style={styles.buttonLabel}>Support Ticket</Text>
+        </Pressable>
 
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
-      <Pressable style={styles.button} onPress={() => router.push('/submit-ticket')}>
-        <Text style={styles.buttonLabel}>hi</Text>
-      </Pressable>
-    </View>
-</ScrollView>
+        <Pressable style={styles.button} onPress={() => router.push('/submit-ticket?type=chromebook')}>
+          <Text style={styles.buttonLabel}>Chromebook Repair Ticket</Text>
+        </Pressable>
+      </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
 
   text: {
-    fontSize: 40,
+    fontSize: 24,
     fontWeight: "700",
     marginBottom: 20,
     textAlign: 'center',
