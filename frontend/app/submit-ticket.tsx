@@ -6,12 +6,14 @@ import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
-import SelectDropdown from 'react-native-select-dropdown'
+import { Dropdown } from 'react-native-element-dropdown'
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
-  const [image, setImage] = useState(null); // Move image state here
+  const [image, setImage] = useState(null);
+  const [dropdownvalue, setdropdownValue] = useState(null);
+
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
       subject: '',
@@ -20,6 +22,15 @@ export default function SubmitScreen() {
       image: '',  // Ensure an empty value for optional image
     }
   });
+
+  // for dropdown menu
+  const renderItem = item => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label}</Text>
+      </View>
+    );
+  };
 
   const pickImage = () => {
     const options = {
@@ -151,20 +162,28 @@ export default function SubmitScreen() {
           />
         )}
       />
+      <Text style={styles.label}>Priority</Text>
 
       <Controller
         control={control}
         rules={{ required: 'This field is required' }}
         render={({ field: { onChange, value } }) => (
-          <SelectDropdown
+          <Dropdown
+            style={styles.dropdown}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
             data={options}
-            onSelect={onChange}
-            buttonTextAfterSelection={(selectedItem) => selectedItem}
-            buttonStyle={{ backgroundColor: "red", width: "90%", borderRadius: 10 }}
-            buttonTextStyle={{ color: "white", fontSize: 16 }}
-            rowTextForSelection={(item) => item}
-            defaultButtonText="Select an option"
-            selectedRow={value}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder="Select item"
+            searchPlaceholder="Search..."
+            value={value}
+            onChange={item => {
+              setdropdownValue(item.value);
+            }}
+            renderItem={renderItem}
           />
         )}
         name="dropdown"
@@ -193,6 +212,18 @@ export default function SubmitScreen() {
 }
 
 const styles = StyleSheet.create({
+  textItem: {
+    height: 60,
+  },
+  label: {
+    textAlign: 'left',
+  },
+  dropdown: {
+    width: "90%",
+    height: 60,
+    borderWidth: 2,
+    borderRadius: 10,
+  },
   container: {
     flex: 1,
     alignItems: 'center',
