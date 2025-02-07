@@ -79,7 +79,7 @@ const getAllContacts = async () => {
 
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
-  const { summary, initialDescription, contactemailaddress, image } = req.body;
+  const { summary, initialDescription, contactemailaddress, image, boardType } = req.body;
 
   // Step 1: Fetch all contacts
   let contacts = [];
@@ -103,6 +103,10 @@ app.post('/create-ticket', async (req, res) => {
   let contactId = ""; // Default to empty if no match
   let companyId = 19298; // Default company ID
   let companyName = "catchall"; // Default company name
+  let newStatus = {
+    id: 16,
+    name: 'New',
+  }
 
   if (matchedContact) {
     contactId = matchedContact.id;
@@ -115,18 +119,25 @@ app.post('/create-ticket', async (req, res) => {
     updatedDescription += `\n\nImage: [View Image](${image})`;
   }
 
+  if (boardType.id == 25) {
+    newStatus = {
+      id: 463,
+      name: "New",
+    }
+  }
+
   try {
     // Define the ticket data
     const ticketData = {
       summary,
       recordType: 'ProjectIssue',
       board: {
-        id: 1,
-        name: 'Help Desk',
+        id: boardType.id,
+        name: boardType.name,
       },
       status: {
-        id: 16,
-        name: 'New',
+        id: newStatus.id,
+        name: newStatus.name,
       },
       contactemailaddress,
       contact: {
