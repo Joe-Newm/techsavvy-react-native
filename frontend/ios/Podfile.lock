@@ -3,6 +3,9 @@ PODS:
   - DoubleConversion (1.1.6)
   - EXConstants (17.0.3):
     - ExpoModulesCore
+  - EXImageLoader (5.0.0):
+    - ExpoModulesCore
+    - React-Core
   - EXJSONUtils (0.14.0)
   - EXManifests (0.15.5):
     - ExpoModulesCore
@@ -226,6 +229,8 @@ PODS:
   - ExpoHaptics (14.0.0):
     - ExpoModulesCore
   - ExpoHead (4.0.16):
+    - ExpoModulesCore
+  - ExpoImagePicker (16.0.5):
     - ExpoModulesCore
   - ExpoKeepAwake (14.0.1):
     - ExpoModulesCore
@@ -2083,6 +2088,7 @@ DEPENDENCIES:
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - EXConstants (from `../node_modules/expo-constants/ios`)
+  - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - EXJSONUtils (from `../node_modules/expo-json-utils/ios`)
   - EXManifests (from `../node_modules/expo-manifests/ios`)
   - Expo (from `../node_modules/expo`)
@@ -2096,6 +2102,7 @@ DEPENDENCIES:
   - ExpoFont (from `../node_modules/expo-font/ios`)
   - ExpoHaptics (from `../node_modules/expo-haptics/ios`)
   - ExpoHead (from `../node_modules/expo-router/ios`)
+  - ExpoImagePicker (from `../node_modules/expo-image-picker/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoLinking (from `../node_modules/expo-linking/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
@@ -2186,6 +2193,8 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec"
   EXConstants:
     :path: "../node_modules/expo-constants/ios"
+  EXImageLoader:
+    :path: "../node_modules/expo-image-loader/ios"
   EXJSONUtils:
     :path: "../node_modules/expo-json-utils/ios"
   EXManifests:
@@ -2212,6 +2221,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-haptics/ios"
   ExpoHead:
     :path: "../node_modules/expo-router/ios"
+  ExpoImagePicker:
+    :path: "../node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   ExpoLinking:
@@ -2370,6 +2381,7 @@ SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
   EXConstants: 277129d9a42ba2cf1fad375e7eaa9939005c60be
+  EXImageLoader: e5da974e25b13585c196b658a440720c075482d5
   EXJSONUtils: 01fc7492b66c234e395dcffdd5f53439c5c29c93
   EXManifests: 15142dee1be3ea1cd0039feddef3888c3f0bb057
   Expo: 8a0cdae07c4092b4e11ccf147c45d928e1dd9c43
@@ -2383,6 +2395,7 @@ SPEC CHECKSUMS:
   ExpoFont: b089994dac1fe603deda1cec151e32c81f46c2f1
   ExpoHaptics: f8eacde90398b8be3648ed823b6e9e6bf87ece3f
   ExpoHead: 034d6c0afc77a33b21676ecfb055e6d5998d9e9c
+  ExpoImagePicker: 32f78cf8edbe0444aefbea1b51bfb12b67730005
   ExpoKeepAwake: 22173f45d767c7d37403fdf48292726901d69ce7
   ExpoLinking: 40e30b571ffb77b280a38bed137d89b21f46f2a0
   ExpoModulesCore: 9e0b600d2489daaace1e5813f18253ed14bb6e55
@@ -2461,6 +2474,6 @@ SPEC CHECKSUMS:
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   Yoga: fcc198acd4a55599b3468cfb6ebc526baff5f06e
 
-PODFILE CHECKSUM: fef27d952a3eb1a95894f537d4818f810998d5e3
+PODFILE CHECKSUM: 20da0669ce4aa541db9c7cc4df7851a83377e851
 
 COCOAPODS: 1.16.2

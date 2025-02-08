@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown'
+import * as ImagePicker from "expo-image-picker"
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
@@ -20,7 +21,7 @@ export default function SubmitScreen() {
       message: '',
       email: '',
       image: '',
-      drodown: '',// Ensure an empty value for optional image
+      drodown: '',
     }
   });
 
@@ -35,24 +36,24 @@ export default function SubmitScreen() {
 
 
   // image picker
-  const pickImage = () => {
-    const options = {
-      mediaType: "photo",
-      quality: 1,
-      includeBase64: true
-    };
 
-    launchImageLibrary(options, (response: any) => {
-      if (response.didCancel) {
-        console.log("User cancelled image picker");
-      } else if (response.errorMessage) {
-        console.log("Error: ", response.errorMessage);
-      } else {
-        const imageUri = `data:image/jpeg;base64,${response.assets[0].base64}`;
-        setImage(imageUri);
-        setValue("image", imageUri); // Store image in form
-      }
+  const pickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true,
     });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      const base64Image = `data:image/jpeg;base64,${result.assets[0].base64}`
+      setImage(base64Image);
+      setValue("image", base64Image);
+    }
   };
 
 
@@ -88,7 +89,7 @@ export default function SubmitScreen() {
       summary: data.subject,
       initialDescription: data.message,
       contactemailaddress: data.email,
-      image: data.image,  // Include optional image
+      image: data.image,
       boardType: boardCheck,
       priorityCheck: data.dropdown,
     });

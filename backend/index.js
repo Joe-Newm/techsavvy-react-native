@@ -2,12 +2,17 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const cors = require('cors');
+const { Readable } = require('stream');  // <-- Make sure Readable is imported
+
 const port = 3000;
+const FormData = require('form-data');
+
 require('dotenv').config();
 
 
 // Middleware to parse JSON bodies
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors());
 
@@ -77,6 +82,7 @@ const getAllContacts = async () => {
 
 
 
+
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
   const { summary, initialDescription, contactemailaddress, image, boardType, priorityCheck } = req.body;
@@ -116,13 +122,15 @@ app.post('/create-ticket', async (req, res) => {
 
   let updatedDescription = initialDescription;
   if (image) {
-    updatedDescription += `\n\n<img src="${image}" width="400"/>`; if (boardType.id == 25) {
+    updatedDescription += `\n\n[View Image](${image})`;
+    if (boardType.id == 25) {
       newStatus = {
         id: 463,
         name: "New",
       }
     }
   }
+
 
 
   let newPriority;
@@ -163,13 +171,6 @@ app.post('/create-ticket', async (req, res) => {
       severity: 'Low',
       impact: 'Low',
       priority: newPriority,
-      attachments: image ? [
-        {
-          fileName: "screenshot.jpg",
-          contentType: "image/jpeg",
-          data: image.split(',')[1] // Remove "data:image/jpeg;base64,"
-        }
-      ] : []
     };
 
     // Send the POST request to ConnectWise
