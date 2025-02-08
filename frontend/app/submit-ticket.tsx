@@ -37,7 +37,6 @@ export default function SubmitScreen() {
     const options = {
       mediaType: "photo",
       quality: 1,
-      includeBase64: false,
     };
 
     launchImageLibrary(options, (response: any) => {
