@@ -125,7 +125,8 @@ app.post('/create-ticket', async (req, res) => {
       name: "New",
     }
   }
-  console.log(priorityCheck)
+
+
   let newPriority;
   // check priority
   if (priorityCheck === 7) {
@@ -135,6 +136,7 @@ app.post('/create-ticket', async (req, res) => {
   } else {
     newPriority = { id: 15, name: 'Priority 2 - High' }
   }
+
 
   try {
     // Define the ticket data

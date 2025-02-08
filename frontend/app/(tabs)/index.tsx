@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, Pressable, Linking, Image } from "react-native";
+import { Text, View, StyleSheet, Pressable, Linking, Image, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { useRouter } from "expo-router";
@@ -6,6 +6,11 @@ import SvgUri from 'react-native-svg';
 
 export default function Index() {
   const router = useRouter();
+
+  const handlePress = () => {
+    Linking.openURL("https://techsavvy.myportallogin.com");
+  }
+
   return (
     <View
       style={{
@@ -36,6 +41,9 @@ export default function Index() {
       <Pressable style={styles.button} onPress={() => Linking.openURL('tel:3188840844').catch((err) => console.error('Failed to open phone dialer', err))}>
         <Text style={styles.buttonLabel}> Call </Text>
       </Pressable>
+      <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <Text style={styles.buttonLabel}> Customer Portal </Text>
+      </TouchableOpacity>
     </View >
   );
 }
@@ -57,6 +65,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffa904',
     marginBottom: 20,
     textAlign: 'center',
+    maxWidth: 600,
   },
   buttonLabel: {
     color: 'black',
