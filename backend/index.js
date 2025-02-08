@@ -79,7 +79,7 @@ const getAllContacts = async () => {
 
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
-  const { summary, initialDescription, contactemailaddress, image, boardType } = req.body;
+  const { summary, initialDescription, contactemailaddress, image, boardType, priorityCheck } = req.body;
 
   // Step 1: Fetch all contacts
   let contacts = [];
@@ -125,6 +125,16 @@ app.post('/create-ticket', async (req, res) => {
       name: "New",
     }
   }
+  console.log(priorityCheck)
+  let newPriority;
+  // check priority
+  if (priorityCheck === 7) {
+    newPriority = { id: 7, name: 'Priority 4 - Low' }
+  } else if (priorityCheck === 8) {
+    newPriority = { id: 8, name: 'Priority 3 - Medium' }
+  } else {
+    newPriority = { id: 15, name: 'Priority 2 - High' }
+  }
 
   try {
     // Define the ticket data
@@ -152,6 +162,7 @@ app.post('/create-ticket', async (req, res) => {
       initialDescription: updatedDescription,
       severity: 'Low',
       impact: 'Low',
+      priority: newPriority,
     };
 
     // Send the POST request to ConnectWise
