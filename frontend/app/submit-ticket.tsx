@@ -19,7 +19,8 @@ export default function SubmitScreen() {
       subject: '',
       message: '',
       email: '',
-      image: '',  // Ensure an empty value for optional image
+      image: '',
+      drodown: '',// Ensure an empty value for optional image
     }
   });
 
@@ -67,9 +68,9 @@ export default function SubmitScreen() {
   }
 
   const options = [
-    { value: 'option1', label: 'Low' },
-    { value: 'option2', label: 'Medium' },
-    { value: 'option3', label: 'High' },
+    { value: 7, label: 'Low' },
+    { value: 8, label: 'Medium' },
+    { value: 15, label: 'High' },
   ];
 
   console.log(type);
@@ -85,6 +86,7 @@ export default function SubmitScreen() {
       contactemailaddress: data.email,
       image: data.image,  // Include optional image
       boardType: boardCheck,
+      priorityCheck: data.dropdown,
     });
 
     try {
@@ -171,8 +173,8 @@ export default function SubmitScreen() {
 
         <Controller
           control={control}
-          name="priority"
-          defaultValue={options[0]} // Ensure there's a default value
+          name="dropdown"
+          defaultValue={options[0].label} // Ensure there's a default value
           render={({ field: { onChange, value } }) => (
             <Dropdown
               style={styles.dropdown}
@@ -182,7 +184,6 @@ export default function SubmitScreen() {
               placeholder="Select an option"
               value={value} // Controlled value
               renderItem={renderItem}
-              renderRightIcon={null}
               renderTouchableComponent={TouchableOpacity}
               onChange={(item) => {
                 setdropdownValue(item.value); // Update local state
