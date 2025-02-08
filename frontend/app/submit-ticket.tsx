@@ -1,6 +1,6 @@
 import {
   View, Text, TextInput, Button, Pressable,
-  StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard
+  StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard, Platform
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
@@ -33,10 +33,13 @@ export default function SubmitScreen() {
     );
   };
 
+
+  // image picker
   const pickImage = () => {
     const options = {
       mediaType: "photo",
       quality: 1,
+      includeBase64: true
     };
 
     launchImageLibrary(options, (response: any) => {
@@ -45,13 +48,15 @@ export default function SubmitScreen() {
       } else if (response.errorMessage) {
         console.log("Error: ", response.errorMessage);
       } else {
-        const imageUri = response.assets[0].uri;
+        const imageUri = `data:image/jpeg;base64,${response.assets[0].base64}`;
         setImage(imageUri);
         setValue("image", imageUri); // Store image in form
       }
     });
   };
 
+
+  // check the type of ticket 
   const checkCategory = (ticketType: any) => {
     if (ticketType == "support") {
       return {
@@ -112,8 +117,10 @@ export default function SubmitScreen() {
     }
   };
 
+  function dismissKeyboard() { if (Platform.OS != "web") { Keyboard.dismiss(); } }
+
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+    <TouchableWithoutFeedback onPress={() => dismissKeyboard()} accessible={false}>
 
       <View style={styles.container}>
         <Text style={styles.text}>Submit a Ticket</Text>

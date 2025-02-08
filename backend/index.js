@@ -116,13 +116,11 @@ app.post('/create-ticket', async (req, res) => {
 
   let updatedDescription = initialDescription;
   if (image) {
-    updatedDescription += `\n\nImage: [View Image](${image})`;
-  }
-
-  if (boardType.id == 25) {
-    newStatus = {
-      id: 463,
-      name: "New",
+    updatedDescription += `\n\n<img src="${image}" width="400"/>`; if (boardType.id == 25) {
+      newStatus = {
+        id: 463,
+        name: "New",
+      }
     }
   }
 
@@ -165,6 +163,13 @@ app.post('/create-ticket', async (req, res) => {
       severity: 'Low',
       impact: 'Low',
       priority: newPriority,
+      attachments: image ? [
+        {
+          fileName: "screenshot.jpg",
+          contentType: "image/jpeg",
+          data: image.split(',')[1] // Remove "data:image/jpeg;base64,"
+        }
+      ] : []
     };
 
     // Send the POST request to ConnectWise
