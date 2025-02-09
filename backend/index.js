@@ -122,6 +122,7 @@ app.post('/create-ticket', async (req, res) => {
 
   let updatedDescription = initialDescription;
   if (image) {
+    console.log(image)
     updatedDescription += `\n\n[View Image](${image})`;
     if (boardType.id == 25) {
       newStatus = {

@@ -35,15 +35,21 @@ export default function SubmitScreen() {
   };
 
 
-  // image picker
+  // delete selected photo 
+  const deleteSelectedPhoto = () => {
+    console.log("deleted")
+    setImage(null);
+    setValue("image", '');
+  }
 
+  // image picker
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images', 'videos'],
+      mediaTypes: 'images',
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 0.3,
       base64: true,
     });
 
@@ -72,16 +78,18 @@ export default function SubmitScreen() {
     }
   }
 
+  // options for priority dropdown
   const options = [
     { value: 7, label: 'Low' },
     { value: 8, label: 'Medium' },
     { value: 15, label: 'High' },
   ];
 
-  console.log(type);
+
+  // submit form
   const onSubmit = async (data: any) => {
     setLoading(true);
-    const url = 'http://localhost:3000/create-ticket';
+    const url = 'http://192.168.1.68:3000/create-ticket';
 
     const boardCheck = checkCategory(type);
 
@@ -206,10 +214,16 @@ export default function SubmitScreen() {
 
         {
           image && (
-            <Image
-              source={{ uri: image }}
-              style={{ width: 100, height: 100, marginTop: 10 }}
-            />
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+              <Image
+                source={{ uri: image }}
+                style={{ width: 100, height: 100, marginTop: 10 }}
+              />
+              <Pressable style={styles.XButton} onPress={deleteSelectedPhoto}>
+                <Text>X</Text>
+              </Pressable>
+            </View>
+
           )
         }
 
@@ -271,6 +285,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffa904',
     marginBottom: 20,
     marginTop: 20,
+  },
+  XButton: {
+    borderRadius: 10,
+    width: 50,
+    height: 50,
+    backgroundColor: '#ffa904',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   form: {
     backgroundColor: '#E0E0E0',
