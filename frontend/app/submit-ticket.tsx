@@ -247,6 +247,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
     justifyContent: 'center',
     marginTop: 20,
+    marginLeft: 20,
+    
   },
   label: {
     fontSize: 16,
