@@ -8,14 +8,14 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown'
 import * as ImagePicker from "expo-image-picker"
-import DatePicker  from "react-native-date-picker"
+//import DatePicker from "react-native-date-picker"
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [dropdownvalue, setdropdownValue] = useState(null);
-  const [date, setDate] = useState(new Date())
+  //const [date, setDate] = useState(new Date())
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -91,7 +91,7 @@ export default function SubmitScreen() {
   // submit form
   const onSubmit = async (data: any) => {
     setLoading(true);
-    const url = 'http://192.168.1.68:3000/create-ticket';
+    const url = 'http://192.168.2.175:3000/create-ticket';
 
     const boardCheck = checkCategory(type);
 
@@ -184,10 +184,11 @@ export default function SubmitScreen() {
           )}
         />
 
-        {Platform.OS === 'web' ? 
-          null : (
-        <DatePicker date={date} onDateChange={setDate}> What Time Are You Available</DatePicker>
-          )
+
+        {//Platform.OS === 'web' ?
+          //null : (
+          //<DatePicker date={date} onDateChange={setDate}> What Time Are You Available</DatePicker>
+          //)
         }
 
         <View style={{ alignItems: "flex-start", width: "90%" }}>
@@ -256,7 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 20,
     marginLeft: 20,
-    
+
   },
   label: {
     fontSize: 16,
