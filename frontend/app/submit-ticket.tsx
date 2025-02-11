@@ -1,6 +1,6 @@
 import {
-  View, Text, TextInput, Button, Pressable,
-  StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard, Platform
+  View, Text, TextInput, Button, Pressable, Alert, Modal,
+  StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard, Platform, ScrollView
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import React, { useState } from "react";
@@ -8,14 +8,16 @@ import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown'
 import * as ImagePicker from "expo-image-picker"
-//import DatePicker from "react-native-date-picker"
+import DatePicker from "react-native-date-picker"
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [dropdownvalue, setdropdownValue] = useState(null);
-  //const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(new Date())
+  const [open, setOpen] = useState(false); // Controls modal visibility
+
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -24,6 +26,7 @@ export default function SubmitScreen() {
       email: '',
       image: '',
       dropdown: '',
+      date: '',
     }
   });
 
@@ -35,6 +38,7 @@ export default function SubmitScreen() {
       </View>
     );
   };
+
 
 
   // delete selected photo 
@@ -115,7 +119,7 @@ export default function SubmitScreen() {
 
       if (response.ok) {
         console.log("Submitted!");
-        alert("Your ticket has been submitted successfully. Please give us some time to work on your issue.");
+        Alert.alert("Success!", "Your ticket has been submitted successfully. Please give us some time to work on your issue.");
       } else {
         console.log("Frontend failed to send.", await response.text());
         alert("Error: Message failed to send. Make sure you filled out every form field.");
@@ -131,122 +135,164 @@ export default function SubmitScreen() {
   function dismissKeyboard() { if (Platform.OS != "web") { Keyboard.dismiss(); } }
 
   return (
-    <TouchableWithoutFeedback onPress={() => dismissKeyboard()} accessible={false}>
+    <ScrollView>
+      <TouchableWithoutFeedback onPress={() => dismissKeyboard()} accessible={false}>
 
-      <View style={styles.container}>
-        <Text style={styles.text}>Submit a Ticket</Text>
+        <View style={styles.container}>
+          <Text style={styles.text}>Submit a Ticket</Text>
 
-        <Controller
-          control={control}
-          name="email"
-          rules={{ required: "Email is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor="#888"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={styles.form}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="subject"
-          rules={{ required: "Subject is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="Subject"
-              placeholderTextColor="#888"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={styles.form}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="message"
-          rules={{ required: "Message is required" }}
-          render={({ field: { onChange, onBlur, value } }) => (
-            <TextInput
-              placeholder="Message"
-              placeholderTextColor="#888"
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-              style={styles.form}
-            />
-          )}
-        />
-
-
-        {//Platform.OS === 'web' ?
-          //null : (
-          //<DatePicker date={date} onDateChange={setDate}> What Time Are You Available</DatePicker>
-          //)
-        }
-
-        <View style={{ alignItems: "flex-start", width: "90%" }}>
-          <Text style={[styles.label, { textAlign: 'left' }]}>Priority</Text>
-        </View>
-
-        <Controller
-          control={control}
-          name="dropdown"
-          defaultValue={options[0].label} // Ensure there's a default value
-          render={({ field: { onChange, value } }) => (
-            <Dropdown
-              style={styles.dropdown}
-              data={options}
-              labelField="label"
-              valueField="value"
-              placeholder="Select an option"
-              value={value} // Controlled value
-              renderItem={renderItem}
-              renderTouchableComponent={TouchableOpacity}
-              onChange={(item) => {
-                setdropdownValue(item.value); // Update local state
-                onChange(item.value); // Update react-hook-form
-              }}
-            />
-          )}
-        />
-        {/* Image Upload (Optional) */}
-        <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
-          <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
-        </TouchableOpacity>
-
-        {
-          image && (
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 20 }}>
-              <Image
-                source={{ uri: image }}
-                style={{ width: 100, height: 100, marginTop: 10 }}
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: "Email is required" }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Email"
+                placeholderTextColor="#888"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={styles.form}
               />
-              <Pressable style={styles.XButton} onPress={deleteSelectedPhoto}>
-                <Text>X</Text>
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="subject"
+            rules={{ required: "Subject is required" }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Subject"
+                placeholderTextColor="#888"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={styles.form}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="message"
+            rules={{ required: "Message is required" }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextInput
+                placeholder="Message"
+                placeholderTextColor="#888"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={styles.form}
+              />
+            )}
+          />
+
+
+
+
+
+
+          <View style={{ alignItems: "flex-start", width: "90%" }}>
+            <Text style={[styles.label, { textAlign: 'left' }]}>Priority</Text>
+          </View>
+          <Controller
+            control={control}
+            name="dropdown"
+            defaultValue={options[0].label} // Ensure there's a default value
+            render={({ field: { onChange, value } }) => (
+              <Dropdown
+                style={styles.dropdown}
+                data={options}
+                labelField="label"
+                valueField="value"
+                placeholder="Select an option"
+                value={value} // Controlled value
+                renderItem={renderItem}
+                renderTouchableComponent={TouchableOpacity}
+                onChange={(item) => {
+                  setdropdownValue(item.value); // Update local state
+                  onChange(item.value); // Update react-hook-form
+                }}
+              />
+            )}
+          />
+
+          {
+            Platform.OS === 'web' ?
+              null : (
+                <View style={{ alignItems: "flex-start", width: "90%", marginTop: 20 }}>
+                  <Text style={styles.label}>What Time Are You Available?</Text>
+
+                  {/* Button to Open Date Picker */}
+                  <TouchableOpacity onPress={() => setOpen(true)} style={styles.dateButton}>
+                    <Text style={styles.buttonLabel}>
+                      {date.toLocaleDateString()} {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </Text>
+                  </TouchableOpacity>
+
+                  {/* Date Picker Modal */}
+                  <Modal transparent={true} visible={open} animationType="slide">
+                    <View style={styles.modalContainer}>
+                      <View style={styles.modalContent}>
+                        <DatePicker date={date} onDateChange={setDate} />
+
+                        {/* Buttons to Confirm or Cancel */}
+                        <View style={{ flexDirection: "row", marginTop: 20 }}>
+                          <TouchableOpacity
+                            onPress={() => setOpen(false)}
+                            style={[styles.modalButton, { backgroundColor: "red" }]}
+                          >
+                            <Text style={styles.buttonLabel}>Cancel</Text>
+                          </TouchableOpacity>
+
+                          <TouchableOpacity
+                            onPress={() => setOpen(false)}
+                            style={[styles.modalButton, { backgroundColor: "green" }]}
+                          >
+                            <Text style={styles.buttonLabel}>Confirm</Text>
+                          </TouchableOpacity>
+                        </View>
+                      </View>
+                    </View>
+                  </Modal>
+                </View>
+              )
+          }
+
+          {/* Image Upload (Optional) */}
+          <TouchableOpacity onPress={pickImage} style={styles.uploadButton}>
+            <Text style={{ color: "black", fontSize: 20, fontWeight: '600', textAlign: "center" }}>Attach Image (Optional)</Text>
+          </TouchableOpacity>
+
+          {
+            image && (
+              <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', gap: 20 }}>
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 100, height: 100, marginTop: 10 }}
+                />
+                <Pressable style={styles.XButton} onPress={deleteSelectedPhoto}>
+                  <Text>X</Text>
+                </Pressable>
+              </View>
+
+            )
+          }
+
+          {
+            loading ? (
+              <ActivityIndicator size="large" color="#ffa904" style={{ marginTop: 20 }} />
+            ) : (
+              <Pressable onPress={handleSubmit(onSubmit)} style={[styles.button, { marginBottom: 40 }]}>
+                <Text style={styles.buttonLabel}>Submit</Text>
               </Pressable>
-            </View>
-
-          )
-        }
-
-        {
-          loading ? (
-            <ActivityIndicator size="large" color="#ffa904" style={{ marginTop: 20 }} />
-          ) : (
-            <Pressable onPress={handleSubmit(onSubmit)} style={styles.button}>
-              <Text style={styles.buttonLabel}>Submit</Text>
-            </Pressable>
-          )
-        }
-      </View >
-    </TouchableWithoutFeedback>
+            )
+          }
+        </View >
+      </TouchableWithoutFeedback>
+    </ScrollView>
   );
 }
 
@@ -297,6 +343,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginTop: 20,
   },
+  dateButton: {
+    borderRadius: 10,
+    width: '90%',
+    height: 60,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    marginBottom: 20,
+  },
   XButton: {
     borderRadius: 10,
     width: 50,
@@ -328,5 +383,24 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 10,
     marginTop: 40,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  modalButton: {
+    flex: 1,
+    padding: 10,
+    marginHorizontal: 10,
+    borderRadius: 10,
+    alignItems: "center",
   },
 });
