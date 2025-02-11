@@ -132,7 +132,7 @@ app.post('/create-ticket', async (req, res) => {
   }
 
   // show date and time available
-  updatedDescription += `Time Available:  ${date}`
+  updatedDescription += `\n\nTime Available:  ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
 
 
 
