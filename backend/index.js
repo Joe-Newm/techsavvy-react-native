@@ -85,7 +85,7 @@ const getAllContacts = async () => {
 
 // Route to create a new ticket
 app.post('/create-ticket', async (req, res) => {
-  const { summary, initialDescription, contactemailaddress, image, boardType, priorityCheck } = req.body;
+  const { summary, initialDescription, contactemailaddress, image, boardType, priorityCheck, date } = req.body;
 
   // Step 1: Fetch all contacts
   let contacts = [];
@@ -130,6 +130,9 @@ app.post('/create-ticket', async (req, res) => {
       }
     }
   }
+
+  // show date and time available
+  updatedDescription += `Time Available:  ${date}`
 
 
 

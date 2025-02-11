@@ -26,7 +26,7 @@ export default function SubmitScreen() {
       email: '',
       image: '',
       dropdown: '',
-      date: '',
+      date: date,
     }
   });
 
