@@ -3,12 +3,14 @@ import {
   StyleSheet, ActivityIndicator, TouchableOpacity, Image, TouchableWithoutFeedback, Keyboard, Platform, ScrollView
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { launchImageLibrary } from "react-native-image-picker";
 import { useLocalSearchParams } from "expo-router";
 import { Dropdown } from 'react-native-element-dropdown'
 import * as ImagePicker from "expo-image-picker"
 import DatePicker from "react-native-date-picker"
+import * as Permissions from 'expo-permissions';
+
 
 export default function SubmitScreen() {
   const { type } = useLocalSearchParams();
@@ -18,6 +20,28 @@ export default function SubmitScreen() {
   const [date, setDate] = useState(null)
   const [open, setOpen] = useState(false); // Controls modal visibility
   const [tempDate, setTempDate] = useState(new Date()); // Holds the temporary selected date
+
+  useEffect(() => {
+    // Check and request permissions on app start
+    if (Platform.OS === 'ios') {
+      requestIOSPermission();
+    } else if (Platform.OS === 'android') {
+      //requestAndroidPermission();
+    }
+  }, []);
+
+  const requestIOSPermission = async () => {
+    try {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA); // Example for camera
+      if (status !== 'granted') {
+        console.log('Permission denied');
+      } else {
+        console.log('Permission granted');
+      }
+    } catch (error) {
+      console.log('Permission error:', error);
+    }
+  };
 
 
   // options for priority dropdown
@@ -96,7 +120,7 @@ export default function SubmitScreen() {
   // submit form
   const onSubmit = async (data: any) => {
     setLoading(true);
-    const url = 'http://localhost:3000/create-ticket';
+    const url = 'http://192.168.1.68:3000/create-ticket';
 
     const boardCheck = checkCategory(type);
 
