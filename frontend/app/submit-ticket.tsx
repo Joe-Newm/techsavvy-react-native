@@ -21,27 +21,27 @@ export default function SubmitScreen() {
   const [open, setOpen] = useState(false); // Controls modal visibility
   const [tempDate, setTempDate] = useState(new Date()); // Holds the temporary selected date
 
-  useEffect(() => {
-    // Check and request permissions on app start
-    if (Platform.OS === 'ios') {
-      requestIOSPermission();
-    } else if (Platform.OS === 'android') {
-      //requestAndroidPermission();
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Check and request permissions on app start
+  //   if (Platform.OS === 'ios') {
+  //     requestIOSPermission();
+  //   } else if (Platform.OS === 'android') {
+  //     //requestAndroidPermission();
+  //   }
+  // }, []);
 
-  const requestIOSPermission = async () => {
-    try {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA); // Example for camera
-      if (status !== 'granted') {
-        console.log('Permission denied');
-      } else {
-        console.log('Permission granted');
-      }
-    } catch (error) {
-      console.log('Permission error:', error);
-    }
-  };
+  // const requestIOSPermission = async () => {
+  //   try {
+  //     const { status } = await Permissions.askAsync(Permissions.CAMERA); // Example for camera
+  //     if (status !== 'granted') {
+  //       console.log('Permission denied');
+  //     } else {
+  //       console.log('Permission granted');
+  //     }
+  //   } catch (error) {
+  //     console.log('Permission error:', error);
+  //   }
+  // };
 
 
   // options for priority dropdown
