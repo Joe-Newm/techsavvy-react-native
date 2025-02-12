@@ -15,9 +15,17 @@ export default function SubmitScreen() {
   const [loading, setLoading] = useState(false);
   const [image, setImage] = useState(null);
   const [dropdownvalue, setdropdownValue] = useState(null);
-  const [date, setDate] = useState(new Date())
+  const [date, setDate] = useState(null)
   const [open, setOpen] = useState(false); // Controls modal visibility
+  const [tempDate, setTempDate] = useState(new Date()); // Holds the temporary selected date
 
+
+  // options for priority dropdown
+  const options = [
+    { value: 7, label: 'Low' },
+    { value: 8, label: 'Medium' },
+    { value: 15, label: 'High' },
+  ];
 
   const { control, handleSubmit, setValue } = useForm({
     defaultValues: {
@@ -25,7 +33,7 @@ export default function SubmitScreen() {
       message: '',
       email: '',
       image: '',
-      dropdown: '',
+      dropdown: options[0].value,
       date: date,
     }
   });
@@ -84,18 +92,11 @@ export default function SubmitScreen() {
     }
   }
 
-  // options for priority dropdown
-  const options = [
-    { value: 7, label: 'Low' },
-    { value: 8, label: 'Medium' },
-    { value: 15, label: 'High' },
-  ];
-
 
   // submit form
   const onSubmit = async (data: any) => {
     setLoading(true);
-    const url = 'http://192.168.2.175:3000/create-ticket';
+    const url = 'http://localhost:3000/create-ticket';
 
     const boardCheck = checkCategory(type);
 
@@ -106,7 +107,9 @@ export default function SubmitScreen() {
       image: data.image,
       boardType: boardCheck,
       priorityCheck: data.dropdown,
+      date: data.date,
     });
+    console.log(data.date)
 
     try {
       const response = await fetch(url, {
@@ -200,7 +203,7 @@ export default function SubmitScreen() {
           <Controller
             control={control}
             name="dropdown"
-            defaultValue={options[0].label} // Ensure there's a default value
+            defaultValue={options[0].value} // Ensure there's a default value
             render={({ field: { onChange, value } }) => (
               <Dropdown
                 style={styles.dropdown}
@@ -228,28 +231,42 @@ export default function SubmitScreen() {
                   {/* Button to Open Date Picker */}
                   <TouchableOpacity onPress={() => setOpen(true)} style={styles.dateButton}>
                     <Text style={styles.buttonLabel}>
-                      {date.toLocaleDateString()} {date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {date
+                        ? `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
+                        : "Select a Date"}
                     </Text>
                   </TouchableOpacity>
 
                   {/* Date Picker Modal */}
-                  <Modal transparent={true} visible={open} animationType="slide">
+                  <Modal transparent={true} visible={open} animationType="fade">
                     <View style={styles.modalContainer}>
                       <View style={styles.modalContent}>
-                        <DatePicker date={date} onDateChange={setDate} />
+                        <DatePicker date={tempDate ?? new Date()}
+                          onDateChange={setTempDate}
+
+                        />
 
                         {/* Buttons to Confirm or Cancel */}
                         <View style={{ flexDirection: "row", marginTop: 20 }}>
                           <TouchableOpacity
-                            onPress={() => setOpen(false)}
-                            style={[styles.modalButton, { backgroundColor: "red" }]}
+                            onPress={() => {
+                              setOpen(false)
+                              setDate(null);
+                              setValue("date", null);
+                            }
+                            }
+                            style={[styles.modalButton, { borderColor: "red" }]}
                           >
                             <Text style={styles.buttonLabel}>Cancel</Text>
                           </TouchableOpacity>
 
                           <TouchableOpacity
-                            onPress={() => setOpen(false)}
-                            style={[styles.modalButton, { backgroundColor: "green" }]}
+                            onPress={() => {
+                              setDate(tempDate);
+                              setValue("date", tempDate);
+                              setOpen(false);
+                            }}
+                            style={[styles.modalButton, { borderColor: "green" }]}
                           >
                             <Text style={styles.buttonLabel}>Confirm</Text>
                           </TouchableOpacity>
@@ -291,8 +308,8 @@ export default function SubmitScreen() {
             )
           }
         </View >
-      </TouchableWithoutFeedback>
-    </ScrollView>
+      </TouchableWithoutFeedback >
+    </ScrollView >
   );
 }
 

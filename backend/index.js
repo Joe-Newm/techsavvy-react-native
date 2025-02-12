@@ -2,7 +2,15 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const cors = require('cors');
-const { Readable } = require('stream');  // <-- Make sure Readable is imported
+const rateLimit = require('express-rate-limit')
+const { Readable } = require('stream');
+
+const formLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  message: 'too many requests, please try again later',
+  headers: true,
+})
 
 const port = 3000;
 const FormData = require('form-data');
@@ -84,7 +92,7 @@ const getAllContacts = async () => {
 
 
 // Route to create a new ticket
-app.post('/create-ticket', async (req, res) => {
+app.post('/create-ticket', formLimiter, async (req, res) => {
   const { summary, initialDescription, contactemailaddress, image, boardType, priorityCheck, date } = req.body;
 
   // Step 1: Fetch all contacts
@@ -123,16 +131,21 @@ app.post('/create-ticket', async (req, res) => {
   let updatedDescription = initialDescription;
   if (image) {
     updatedDescription += `\n\n[View Image](${image})`;
-    if (boardType.id == 25) {
-      newStatus = {
-        id: 463,
-        name: "New",
-      }
+
+  }
+
+
+  if (boardType.id == 25) {
+    newStatus = {
+      id: 463,
+      name: "New",
     }
   }
 
   // show date and time available
-  updatedDescription += `\n\nTime Available:  ${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  if (date != null) {
+    updatedDescription += `\n\nTime Available:  ${new Date(date).toLocaleDateString()} ${new Date(date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+  }
 
 
 
