@@ -28,7 +28,7 @@ export default function Index() {
       {/*<SvgUri uri={require('../../assets/images/full-logo.svg')} width="200" height="200" /> */}
 
       <Image
-        source={require('../../assets/images/full-logo.png')} // Adjust the path accordingly
+        source={require('../../assets/images/new-logo.png')} // Adjust the path accordingly
         style={styles.image}
         resizeMode="contain" // This keeps the aspect ratio
       />
