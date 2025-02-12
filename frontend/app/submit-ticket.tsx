@@ -243,7 +243,7 @@ export default function SubmitScreen() {
                       <View style={styles.modalContent}>
                         <DatePicker date={tempDate ?? new Date()}
                           onDateChange={setTempDate}
-
+                          theme="light"
                         />
 
                         {/* Buttons to Confirm or Cancel */}
