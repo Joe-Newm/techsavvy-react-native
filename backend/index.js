@@ -7,7 +7,7 @@ const { Readable } = require('stream');
 
 const formLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 15,
   message: 'too many requests, please try again later',
   headers: true,
 })
