@@ -120,7 +120,7 @@ export default function SubmitScreen() {
   // submit form
   const onSubmit = async (data: any) => {
     setLoading(true);
-    const url = 'http://192.168.1.68:3000/create-ticket';
+    const url = 'https://backend-lively-wind-8008.fly.dev/create-ticket';
 
     const boardCheck = checkCategory(type);
 

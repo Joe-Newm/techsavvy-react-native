@@ -15,5 +15,8 @@
     "express": "^4.21.2",
     "express-rate-limit": "^7.5.0",
     "form-data": "^4.0.1"
+  },
+  "devDependencies": {
+    "@flydotio/dockerfile": "^0.7.6"
   }
 }
