@@ -124,6 +124,10 @@ export default function SubmitScreen() {
 
     const boardCheck = checkCategory(type);
 
+    // Convert date to ISO string in local timezone before sending
+    const localDate = new Date(data.date);
+    const adjustedDate = new Date(localDate.getTime() - localDate.getTimezoneOffset() * 60000);
+
     const body = JSON.stringify({
       summary: data.subject,
       initialDescription: data.message,
@@ -131,7 +135,7 @@ export default function SubmitScreen() {
       image: data.image,
       boardType: boardCheck,
       priorityCheck: data.dropdown,
-      date: data.date,
+      date: adjustedDate,
     });
     console.log(data.date)
 
@@ -268,7 +272,7 @@ export default function SubmitScreen() {
                         <DatePicker date={tempDate ?? new Date()}
                           onDateChange={setTempDate}
                           theme="light"
-                        />
+                          timeZoneOffsetInMinutes={new Date().getTimezoneOffset() * -1} />
 
                         {/* Buttons to Confirm or Cancel */}
                         <View style={{ flexDirection: "row", marginTop: 20 }}>
@@ -289,6 +293,7 @@ export default function SubmitScreen() {
                               setDate(tempDate);
                               setValue("date", tempDate);
                               setOpen(false);
+                              console.log(tempDate)
                             }}
                             style={[styles.modalButton, { borderColor: "green" }]}
                           >
