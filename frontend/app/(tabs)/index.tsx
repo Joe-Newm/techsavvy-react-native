@@ -38,7 +38,7 @@ export default function Index() {
       >
         <Text style={styles.buttonLabel}> Submit a Ticket </Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => Linking.openURL('tel:3188840844').catch((err) => console.error('Failed to open phone dialer', err))}>
+      <Pressable style={styles.button} onPress={() => Linking.openURL('tel:+13188840844').catch((err) => console.error('Failed to open phone dialer', err))}>
         <Text style={styles.buttonLabel}> Call </Text>
       </Pressable>
       <TouchableOpacity style={styles.button} onPress={handlePress}>
