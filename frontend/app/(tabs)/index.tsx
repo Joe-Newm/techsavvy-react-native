@@ -1,14 +1,22 @@
-import { Text, View, StyleSheet, Pressable, Linking, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Pressable, Linking, Image, TouchableOpacity, Platform } from "react-native";
+import DeviceInfo from 'react-native-device-info';
 import { Link } from "expo-router";
 import { Header } from "react-native/Libraries/NewAppScreen";
 import { useRouter } from "expo-router";
 import SvgUri from 'react-native-svg';
+
+const isIpad = DeviceInfo.isTablet(); // Detect if the device is an iPad
+
 
 export default function Index() {
   const router = useRouter();
 
   const handlePress = () => {
     Linking.openURL("https://techsavvy.myportallogin.com");
+  }
+
+  if (Platform.OS !== 'ios' || isIpad) {
+    return null;
   }
 
   return (
@@ -38,9 +46,14 @@ export default function Index() {
       >
         <Text style={styles.buttonLabel}> Submit a Ticket </Text>
       </Pressable>
-      <Pressable style={styles.button} onPress={() => Linking.openURL('tel:+13188840844').catch((err) => console.error('Failed to open phone dialer', err))}>
-        <Text style={styles.buttonLabel}> Call </Text>
-      </Pressable>
+      {Platform.OS === 'ios' ? (
+        <Pressable
+          style={styles.button}
+          onPress={() => Linking.openURL('tel:+13188840844').catch((err) => console.error('Failed to open phone dialer', err))}
+        >
+          <Text style={styles.buttonLabel}>Call</Text>
+        </Pressable>
+      ) : null}
       <TouchableOpacity style={styles.button} onPress={handlePress}>
         <Text style={styles.buttonLabel}> Customer Portal </Text>
       </TouchableOpacity>
